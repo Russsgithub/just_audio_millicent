@@ -8,6 +8,13 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
+    <queries>
+        <!-- For inAppWebView support -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
+
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -15,7 +22,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:usesCleartextTraffic="true"
-        android:label="just_audio_example"
+        android:label="millicent"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
@@ -30,6 +37,16 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Allow webview links-->
+        <activity android:name="com.linusu.flutter_web_auth.CallbackActivity" android:exported="true">
+            <intent-filter android:label="flutter_web_auth">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="millicent"/>
             </intent-filter>
         </activity>
 
