@@ -98,8 +98,8 @@ class SeekBarState extends State<SeekBar> {
           bottom: 0.0,
           child: Text(
               RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
-                      ?.group(1) ??
+                  .firstMatch("$_remaining")
+                  ?.group(1) ??
                   '$_remaining',
               style: Theme.of(context).textTheme.bodySmall),
         ),
@@ -116,19 +116,19 @@ class HiddenThumbComponentShape extends SliderComponentShape {
 
   @override
   void paint(
-    PaintingContext context,
-    Offset center, {
-    required Animation<double> activationAnimation,
-    required Animation<double> enableAnimation,
-    required bool isDiscrete,
-    required TextPainter labelPainter,
-    required RenderBox parentBox,
-    required SliderThemeData sliderTheme,
-    required TextDirection textDirection,
-    required double value,
-    required double textScaleFactor,
-    required Size sizeWithOverflow,
-  }) {}
+      PaintingContext context,
+      Offset center, {
+        required Animation<double> activationAnimation,
+        required Animation<double> enableAnimation,
+        required bool isDiscrete,
+        required TextPainter labelPainter,
+        required RenderBox parentBox,
+        required SliderThemeData sliderTheme,
+        required TextDirection textDirection,
+        required double value,
+        required double textScaleFactor,
+        required Size sizeWithOverflow,
+      }) {}
 }
 
 class PositionData {
@@ -146,8 +146,6 @@ void showSliderDialog({
   required double min,
   required double max,
   String valueSuffix = '',
-  // TODO: Replace these two by ValueStream.
-  required double value,
   required Stream<double> stream,
   required ValueChanged<double> onChanged,
 }) {
@@ -170,7 +168,7 @@ void showSliderDialog({
                 divisions: divisions,
                 min: min,
                 max: max,
-                value: snapshot.data ?? value,
+                value: snapshot.data ?? 1.0,
                 onChanged: onChanged,
               ),
             ],
