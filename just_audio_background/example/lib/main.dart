@@ -153,176 +153,173 @@ class MyAppState extends State<MyApp> {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             home: Scaffold(
-              backgroundColor: const Color(0xff5f6459),
               body: SafeArea(
                 top: false,
                 bottom: false,
                 child: Container(
                   padding: const EdgeInsets.only(top: 24.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black54, width: 0.5),
-                      color: const Color(0xff5f6459), //0xffe3dfb2
-                      borderRadius:
-                          BorderRadius.circular(6.0), // Rounded inner edges
-                    ),
-                    child: Stack(
-                      alignment: AlignmentDirectional.bottomCenter,
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              StreamBuilder<IcyMetadata?>(
-                                stream: _player.icyMetadataStream,
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const SizedBox();
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else if (!snapshot.hasData) {
-                                    return const SizedBox();
-                                  } else {
-                                    final metadata = snapshot.data;
-                                    final jsonString =
-                                        metadata?.info?.title ?? '';
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black54, width: 0.5),
+                    color: const Color(0xff5f6459), //0xffe3dfb2
+                    borderRadius:
+                        BorderRadius.circular(6.0), // Rounded inner edges
+                  ),
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomCenter,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            StreamBuilder<IcyMetadata?>(
+                              stream: _player.icyMetadataStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const SizedBox();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else if (!snapshot.hasData) {
+                                  return const SizedBox();
+                                } else {
+                                  final metadata = snapshot.data;
+                                  final jsonString =
+                                      metadata?.info?.title ?? '';
 
-                                    if (jsonString.isNotEmpty) {
-                                      print(jsonString);
-                                      try {
-                                        List<dynamic> jsonDataList =
-                                            jsonDecode(jsonString);
+                                  if (jsonString.isNotEmpty) {
+                                    print(jsonString);
+                                    try {
+                                      List<dynamic> jsonDataList =
+                                          jsonDecode(jsonString);
 
-                                        Map<String, dynamic> jsonData =
-                                            jsonDataList[1];
+                                      Map<String, dynamic> jsonData =
+                                          jsonDataList[1];
 
-                                        var musicTitle =
-                                            jsonData['music']['title'];
-                                        var musicArtist =
-                                            jsonData['music']['artist'];
-                                        var musicUrl =
-                                            jsonData['music']['source_url'];
-                                        var musicImage =
-                                            (jsonData['music']['image'] != null)
-                                                ? jsonData['music']['image']
-                                                : "";
-                                        var fieldTitle =
-                                            jsonData['field']['title'];
-                                        var fieldArtist =
-                                            jsonData['field']['artist'];
-                                        var fieldUrl =
-                                            jsonData['field']['source_url'];
-                                        var vocalTitle =
-                                            jsonData['vocal']['title'];
-                                        var vocalArtist =
-                                            jsonData['vocal']['artist'];
-                                        var vocalUrl =
-                                            jsonData['vocal']['source_url'];
+                                      var musicTitle =
+                                          jsonData['music']['title'];
+                                      var musicArtist =
+                                          jsonData['music']['artist'];
+                                      var musicUrl =
+                                          jsonData['music']['source_url'];
+                                      var musicImage =
+                                          (jsonData['music']['image'] != null)
+                                              ? jsonData['music']['image']
+                                              : "";
+                                      var fieldTitle =
+                                          jsonData['field']['title'];
+                                      var fieldArtist =
+                                          jsonData['field']['artist'];
+                                      var fieldUrl =
+                                          jsonData['field']['source_url'];
+                                      var vocalTitle =
+                                          jsonData['vocal']['title'];
+                                      var vocalArtist =
+                                          jsonData['vocal']['artist'];
+                                      var vocalUrl =
+                                          jsonData['vocal']['source_url'];
 
-                                        musicTitle =
-                                            musicTitle.contains("Error")
-                                                ? "silence"
-                                                : musicTitle;
-                                        musicArtist =
-                                            musicTitle.contains("Error")
-                                                ? "silence"
-                                                : musicArtist;
+                                      musicTitle =
+                                          musicTitle.contains("Error")
+                                              ? "silence"
+                                              : musicTitle;
+                                      musicArtist =
+                                          musicTitle.contains("Error")
+                                              ? "silence"
+                                              : musicArtist;
 
-                                        return Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              if (vocalTitle == "silence")
-                                                const Spacer(),
-                                              if (vocalTitle != "silence")
-                                                MetadataContainer(
-                                                    stream: "vocal",
-                                                    title: '$vocalTitle',
-                                                    artist: '$vocalArtist',
-                                                    image: '',
-                                                    link: '$vocalUrl'),
-                                              if (fieldTitle == "silence")
-                                                const Spacer(),
-                                              if (fieldTitle != "silence")
-                                                MetadataContainer(
-                                                    stream: "field",
-                                                    title: '$fieldTitle',
-                                                    artist: '$fieldArtist',
-                                                    image: '',
-                                                    link: '$fieldUrl'),
-                                              if (musicTitle == "silence")
-                                                const Spacer(flex: 6),
-                                              if (musicTitle != "silence")
-                                                MetadataContainer(
-                                                    stream: "music",
-                                                    title: '$musicTitle',
-                                                    artist: '$musicArtist',
-                                                    image: '$musicImage',
-                                                    link: '$musicUrl'),
-                                            ],
-                                          ),
-                                        );
-                                      } catch (e) {
-                                        print("Error decoding json: $e");
-                                        return const Expanded(child: Column());
-                                      }
-                                    } else {
+                                      return Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            if (vocalTitle == "silence")
+                                              const Spacer(),
+                                            if (vocalTitle != "silence")
+                                              MetadataContainer(
+                                                  stream: "vocal",
+                                                  title: '$vocalTitle',
+                                                  artist: '$vocalArtist',
+                                                  image: '',
+                                                  link: '$vocalUrl'),
+                                            if (fieldTitle == "silence")
+                                              const Spacer(),
+                                            if (fieldTitle != "silence")
+                                              MetadataContainer(
+                                                  stream: "field",
+                                                  title: '$fieldTitle',
+                                                  artist: '$fieldArtist',
+                                                  image: '',
+                                                  link: '$fieldUrl'),
+                                            if (musicTitle == "silence")
+                                              const Spacer(flex: 6),
+                                            if (musicTitle != "silence")
+                                              MetadataContainer(
+                                                  stream: "music",
+                                                  title: '$musicTitle',
+                                                  artist: '$musicArtist',
+                                                  image: '$musicImage',
+                                                  link: '$musicUrl'),
+                                          ],
+                                        ),
+                                      );
+                                    } catch (e) {
+                                      print("Error decoding json: $e");
                                       return const Expanded(child: Column());
                                     }
+                                  } else {
+                                    return const Expanded(child: Column());
                                   }
-                                },
-                              ),
-                              Center(
-                                child: Container(
-                                  color: Colors.transparent,
-                                  height: 70,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 12.0, left: 12.0, right: 12.0),
-                                    child: Container(
-                                        decoration: const BoxDecoration(
-                                            image: DecorationImage(
-                                      isAntiAlias: true,
-                                      opacity: 0.7,
-                                      image: AssetImage(
-                                          "assets/images/millicent_word.png"),
-                                    ))),
-                                  ),
+                                }
+                              },
+                            ),
+                            Center(
+                              child: Container(
+                                color: Colors.transparent,
+                                height: 70,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 12.0, left: 12.0, right: 12.0),
+                                  child: Container(
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                    isAntiAlias: true,
+                                    opacity: 0.7,
+                                    image: AssetImage(
+                                        "assets/images/millicent_word.png"),
+                                  ))),
                                 ),
                               ),
-                              Center(
-                                child: Container(
-                                  color: const Color(0x00131313),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 20, left: 12.0, right: 12.0),
-                                    child: Container(
-                                        height:
-                                            16, // Margin to create space for the border
-                                        decoration: const BoxDecoration(
-                                            image: DecorationImage(
-                                          isAntiAlias: true,
-                                          opacity: 1.0,
-                                          image: AssetImage(
-                                              "assets/images/rbb.png"),
-                                        ))),
-                                  ),
+                            ),
+                            Center(
+                              child: Container(
+                                color: const Color(0x00131313),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 20, left: 12.0, right: 12.0),
+                                  child: Container(
+                                      height:
+                                          16, // Margin to create space for the border
+                                      decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                        isAntiAlias: true,
+                                        opacity: 1.0,
+                                        image: AssetImage(
+                                            "assets/images/rbb.png"),
+                                      ))),
                                 ),
                               ),
-                              // Display play/pause button and volume/speed sliders.
-                              ControlButtons(_player),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                            ),
+                            // Display play/pause button and volume/speed sliders.
+                            ControlButtons(_player),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-              ),
+                ),
             ),
         ),
         ),
