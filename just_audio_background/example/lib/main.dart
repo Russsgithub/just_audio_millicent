@@ -1,18 +1,17 @@
-import 'dart:convert';
-import 'dart:core';
-
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:millicent/common.dart';
+import 'package:just_audio_example/common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:marqueer/marqueer.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+import 'dart:convert';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -68,7 +67,6 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-
     _player = AudioPlayer();
 
     _init();
@@ -155,11 +153,12 @@ class MyAppState extends State<MyApp> {
         child: MaterialApp(
             debugShowCheckedModeBanner: false,
             home: Scaffold(
+              backgroundColor: const Color(0xff5f6459),
               body: SafeArea(
                 top: false,
                 bottom: false,
                 child: Container(
-                  color: Colors.black,
+                  padding: const EdgeInsets.only(top: 24.0),
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.black54, width: 0.5),
@@ -323,9 +322,11 @@ class MyAppState extends State<MyApp> {
                       ],
                     ),
                   ),
-                ),
               ),
-            )));
+            ),
+        ),
+        ),
+    );
   }
 }
 
@@ -619,6 +620,8 @@ class Manifesto extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
+        top: false,
+        bottom: false,
         child: Container(
           height: double.infinity,
           color: Colors.black,
@@ -741,6 +744,7 @@ class Manifesto extends StatelessWidget {
                                   fontWeight: FontWeight.w100),
                               'back'),
                         ),
+                        const Spacer(flex: 2)
                       ],
                     ),
                   ),
