@@ -1,6 +1,8 @@
-name: just_audio_example
+name: millicent
 description: Demonstrates how to use the just_audio plugin.
 publish_to: 'none'
+
+version: 2.0.0+1
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -14,6 +16,10 @@ dependencies:
     path: ../../just_audio
   just_audio_background:
     path: ..
+  url_launcher: ^6.3.0
+  flutter_spinkit: ^5.2.1
+  marqueer: ^1.4.5
+  transparent_image: ^2.0.0
 
 # Uncomment when testing platform interface changes.
 # dependency_overrides:
@@ -31,9 +37,32 @@ dev_dependencies:
     sdk: flutter
   # integration_test: ^1.0.1
   test: ^1.16.5
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
 
+  fonts:
+    - family: Tiempos
+      fonts:
+        - asset: assets/fonts/TiemposHeadline.otf
+    - family: Walfork
+      fonts:
+        - asset: assets/fonts/Walfork-Regular.ttf
+
   assets:
     - audio/
+    - assets/images/millicent_sized_portrait_flutter.png
+    - assets/images/millicent_icon.png
+    - assets/images/default_cover.png
+    - assets/images/rbb.png
+    - assets/images/millicent_word.png
+    - assets/images/millicent_manifesto_header.png
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/images/millicent_icon.png"
+  background_color: "#91e74c"
+  background_color_ios: "#91e74c"
