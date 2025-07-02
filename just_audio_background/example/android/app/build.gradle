@@ -5,16 +5,16 @@ plugins {
 }
 
 android {
-    namespace 'com.ryanheise.just_audio_example'
+    namespace 'com.millicent.millicent'
     compileSdk flutter.compileSdkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "11" // or "21" if you want to target Java 21 explicitly
+        jvmTarget = "17" // or "21" if you want to target Java 21 explicitly
     }
 
     defaultConfig {
