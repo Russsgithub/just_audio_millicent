@@ -157,7 +157,7 @@ class MyAppState extends State<MyApp> {
                 top: false,
                 bottom: false,
                 child: Container(
-                  padding: const EdgeInsets.only(top: 24.0),
+                  padding: const EdgeInsets.only(top: 55.0),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black54, width: 0.5),
                     color: const Color(0xff5f6459), //0xffe3dfb2
@@ -275,6 +275,7 @@ class MyAppState extends State<MyApp> {
                                 }
                               },
                             ),
+                            const SizedBox(height: 12),
                             Center(
                               child: Container(
                                 color: Colors.transparent,
@@ -314,6 +315,7 @@ class MyAppState extends State<MyApp> {
                             ),
                             // Display play/pause button and volume/speed sliders.
                             ControlButtons(_player),
+                            const SizedBox(height: 18),
                           ],
                         ),
                       )
