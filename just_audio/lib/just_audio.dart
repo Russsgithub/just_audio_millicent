@@ -2044,8 +2044,8 @@ class IcyInfo {
 
   static IcyInfo _fromMessage(IcyInfoMessage message) => IcyInfo(
         title: message.title,
-        artist: message.artist,
-        url: message.url,
+        artist: "",
+        url: "",
       );
 
   IcyInfo({required this.title, required this.artist, required this.url});
