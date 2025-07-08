@@ -1,4 +1,5 @@
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -7,6 +8,7 @@ import 'package:just_audio_example/common.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:marqueer/marqueer.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -14,7 +16,9 @@ import 'package:transparent_image/transparent_image.dart';
 import 'dart:convert';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
@@ -64,10 +68,12 @@ class MyAppState extends State<MyApp> {
     ),
   );
 
+  final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   @override
   void initState() {
     super.initState();
-    _player = AudioPlayer();
+    _player = AudioPlayer(maxSkipsOnError: 3);
 
     _init();
   }
@@ -76,8 +82,14 @@ class MyAppState extends State<MyApp> {
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
 
+    _player.errorStream.listen((e) {
+      print('A stream error occurred: $e');
+    });
+
     try {
-      await _player.setAudioSource(_playlist);
+      await _player.setAudioSource(_playlist,
+          preload: kIsWeb || defaultTargetPlatform != TargetPlatform.linux);
+      FlutterNativeSplash.remove();
       _player.play();
     } on PlayerException catch (e) {
       print("Initialization Error code: ${e.code}");
@@ -93,6 +105,12 @@ class MyAppState extends State<MyApp> {
       print("Error loading playlist: $e");
       print(stackTrace);
     }
+    // Show a snackbar whenever reaching the end of an item in the playlist.
+    _player.positionDiscontinuityStream.listen((discontinuity) {
+      if (discontinuity.reason == PositionDiscontinuityReason.autoAdvance) {
+        _showItemFinished(discontinuity.previousEvent.currentIndex);
+      }
+    });
 
     _player.playbackEventStream.listen((event) {},
         onError: (Object e, StackTrace st) {
@@ -118,6 +136,18 @@ class MyAppState extends State<MyApp> {
         });
       }
     });
+  }
+
+  void _showItemFinished(int? index) {
+    if (index == null) return;
+    final sequence = _player.sequence;
+    if (index >= sequence.length) return;
+    final source = sequence[index];
+    final metadata = source.tag as MediaItem;
+    _scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
+      content: Text('Finished playing ${metadata.title}'),
+      duration: const Duration(seconds: 1),
+    ));
   }
 
   @override
