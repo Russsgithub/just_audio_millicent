@@ -13,6 +13,11 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:marqueer/marqueer.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+import 'package:flutter_app_update/flutter_app_update.dart';
+import 'package:http/http.dart' as http;
+import 'package:package_info_plus/package_info_plus.dart';
+
+
 import 'dart:convert';
 
 Future<void> main() async {
@@ -69,6 +74,53 @@ class MyAppState extends State<MyApp> {
   );
 
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  Future<void> checkForUpdate() async {
+    const githubApiUrl = 'https://api.github.com/repos/Russsgithub/just_audio_millicent/releases/latest';
+
+    try {
+      // Step 1: Get current app version
+      final packageInfo = await PackageInfo.fromPlatform();
+      final currentVersion = packageInfo.version; // e.g. "1.0.0"
+
+      // Step 2: Fetch latest GitHub release
+      final response = await http.get(Uri.parse(githubApiUrl));
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        final latestVersion = json['tag_name']; // e.g. "2.0.0"
+
+        if (latestVersion == currentVersion) {
+          print('App is already up-to-date: $currentVersion');
+          return; // Exit early
+        }
+
+        print('New version available: $latestVersion');
+
+        // Step 3: Look for APK asset
+        final assets = json['assets'] as List<dynamic>;
+        for (var asset in assets) {
+          final name = asset['name'] as String;
+          if (name.endsWith('.apk')) {
+            final apkUrl = asset['browser_download_url'];
+
+            final update = UpdateModel(
+              apkUrl,
+              'millicent_latest.apk',
+              'ic_launcher',
+              '', // iOS URL placeholder
+            );
+
+            AzhonAppUpdate.update(update);
+            break;
+          }
+        }
+      } else {
+        print('GitHub API error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Update check failed: $e');
+    }
+  }
+
 
   @override
   void initState() {
@@ -79,6 +131,8 @@ class MyAppState extends State<MyApp> {
   }
 
   Future<void> _init() async {
+    await checkForUpdate();
+
     final session = await AudioSession.instance;
     await session.configure(const AudioSessionConfiguration.music());
 
