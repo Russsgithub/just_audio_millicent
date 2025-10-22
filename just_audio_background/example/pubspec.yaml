@@ -1,5 +1,5 @@
 name: just_audio_example
-description: Demonstrates how to use the just_audio plugin.
+description: millicent audio mirror player.
 publish_to: 'none'
 
 version: 2.1.2+1
