@@ -472,7 +472,7 @@ class MetadataContainer extends StatelessWidget {
                       image: image,
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.width,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       fadeInDuration: const Duration(milliseconds: 400),
                       fadeOutDuration: const Duration(milliseconds: 800),
                       imageErrorBuilder: (context, error, stackTrace) {
