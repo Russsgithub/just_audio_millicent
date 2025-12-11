@@ -63,7 +63,7 @@ class MyAppState extends State<MyApp> {
   late AudioPlayer _player;
 
   final _playlist = HlsAudioSource(
-    Uri.parse("https://d1i4sik9cp7a6c.cloudfront.net/hls/live.m3u8"),
+    Uri.parse("https://millicent.org/hls/hls/live.m3u8"),
     tag: MediaItem(
       id: '${_nextMediaId++}',
       album: "",
